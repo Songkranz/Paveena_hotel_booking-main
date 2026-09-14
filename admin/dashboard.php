@@ -11,23 +11,49 @@ $total_bookings = $pdo->query("SELECT COUNT(*) FROM bookings")->fetchColumn();
 <html lang="th">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>หน้าหลักผู้ดูแลระบบ</title>
+    <link rel="stylesheet" href="../assets/backoffice.css">
 </head>
-<body>
-    <h2>สวัสดีคุณ <?= htmlspecialchars($_SESSION['full_name']) ?> (ผู้ดูแลระบบ)</h2>
+<body class="backoffice-body">
+    <header class="bo-header">
+        <div class="bo-header-inner">
+            <a class="bo-brand" href="dashboard.php">PAVEENA HOTEL · ADMIN</a>
+            <nav class="bo-nav" aria-label="เมนูผู้ดูแลระบบ">
+                <a href="dashboard.php" aria-current="page">หน้าหลัก</a>
+                <a href="manage_rooms.php">ห้องพัก</a>
+                <a href="manage_staff.php">พนักงาน</a>
+                <a href="reports.php">รายงาน</a>
+                <a href="../customer/logout.php">ออกจากระบบ</a>
+            </nav>
+        </div>
+    </header>
 
-    <div style="border:1px solid #ccc; padding:10px; margin-bottom:15px;">
-        <p>ห้องพักทั้งหมด: <strong><?= $total_rooms ?></strong> ห้อง</p>
-        <p>ว่าง: <strong><?= $available ?></strong> ห้อง | ไม่ว่าง: <strong><?= $occupied ?></strong> ห้อง</p>
-        <p>การจองทั้งหมด: <strong><?= $total_bookings ?></strong> รายการ</p>
-    </div>
+    <main class="bo-main">
+        <header class="bo-page-heading">
+            <div>
+                <h1>ภาพรวมระบบ</h1>
+                <p>สวัสดีคุณ <?= htmlspecialchars($_SESSION['full_name']) ?> · ผู้ดูแลระบบ</p>
+            </div>
+        </header>
 
-    <nav>
-        <a href="manage_rooms.php">จัดการห้องพัก</a> |
-        <a href="manage_staff.php">จัดการพนักงาน</a> |
-        <a href="reports.php">รายงานสรุป</a> |
-        <a href="../staff/pending_payments.php">ตรวจสอบสลิป</a> |
-        <a href="../customer/logout.php">ออกจากระบบ</a>
-    </nav>
+        <dl class="bo-stats" aria-label="ข้อมูลสรุป">
+            <div><dt>ห้องพักทั้งหมด</dt><dd><?= number_format($total_rooms) ?></dd></div>
+            <div><dt>ห้องว่าง</dt><dd><?= number_format($available) ?></dd></div>
+            <div><dt>ห้องไม่ว่าง</dt><dd><?= number_format($occupied) ?></dd></div>
+            <div><dt>การจองทั้งหมด</dt><dd><?= number_format($total_bookings) ?></dd></div>
+        </dl>
+
+        <section class="bo-section" aria-labelledby="admin-menu-title">
+            <h2 id="admin-menu-title">เมนูจัดการ</h2>
+            <div class="bo-menu">
+                <a href="manage_rooms.php"><strong>จัดการห้องพัก</strong><span>เพิ่ม แก้ไข และเปลี่ยนสถานะห้อง</span></a>
+                <a href="manage_staff.php"><strong>จัดการพนักงาน</strong><span>เพิ่มหรือลบบัญชีพนักงาน</span></a>
+                <a href="../staff/pending_payments.php"><strong>ตรวจสอบสลิป</strong><span>อนุมัติหรือปฏิเสธหลักฐานการชำระเงิน</span></a>
+                <a href="../staff/manage_bookings.php"><strong>จัดการการเข้าพัก</strong><span>บันทึกการเช็คอินและเช็คเอาต์</span></a>
+                <a href="reports.php"><strong>รายงานสรุป</strong><span>ตรวจสอบรายได้และประวัติการจอง</span></a>
+            </div>
+        </section>
+    </main>
 </body>
 </html>

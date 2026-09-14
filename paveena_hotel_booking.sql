@@ -95,7 +95,9 @@ CREATE TABLE `rooms` (
   `room_number` varchar(10) NOT NULL,
   `room_type_id` int(11) NOT NULL,
   `status` enum('available','occupied','maintenance') NOT NULL DEFAULT 'available',
-  `image` varchar(255) DEFAULT NULL
+  `image` varchar(255) DEFAULT NULL,
+  `image_2` varchar(255) DEFAULT NULL,
+  `image_3` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

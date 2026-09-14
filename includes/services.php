@@ -3,7 +3,6 @@
 $SERVICES = [
     'extra_bed'     => ['name' => 'เตียงเสริม',          'price' => 300.00],
     'breakfast'     => ['name' => 'อาหารเช้า (ต่อคืน)',  'price' => 150.00],
-    'airport'       => ['name' => 'รับส่งสนามบิน',       'price' => 500.00],
     'late_checkout' => ['name' => 'เช็คเอาต์ล่าช้า',      'price' => 200.00],
 ];
 ?>

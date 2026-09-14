@@ -15,7 +15,7 @@ if (!$room_id || empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_
     exit();
 }
 
-$stmt = $pdo->prepare("SELECT rooms.image,
+$stmt = $pdo->prepare("SELECT rooms.image, rooms.image_2, rooms.image_3,
                               (SELECT COUNT(*) FROM bookings WHERE bookings.room_id = rooms.id) AS booking_count
                        FROM rooms
                        WHERE rooms.id = ?");
@@ -37,10 +37,12 @@ try {
     $stmt = $pdo->prepare("DELETE FROM rooms WHERE id = ?");
     $stmt->execute([$room_id]);
 
-    if ($room['image']) {
-        $image_path = __DIR__ . '/../assets/uploads/rooms/' . basename($room['image']);
-        if (is_file($image_path)) {
-            unlink($image_path);
+    foreach ([$room['image'], $room['image_2'], $room['image_3']] as $image_name) {
+        if ($image_name) {
+            $image_path = __DIR__ . '/../assets/uploads/rooms/' . basename($image_name);
+            if (is_file($image_path)) {
+                unlink($image_path);
+            }
         }
     }
 

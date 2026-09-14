@@ -43,52 +43,57 @@ $types = $pdo->query("SELECT room_types.*,
 <html lang="th">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>จัดการประเภทห้องพัก</title>
-    <style>
-        body { font-family: sans-serif; }
-        .panel { border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; max-width: 700px; }
-        input[type=text], textarea { width: 300px; }
-    </style>
+    <link rel="stylesheet" href="../assets/backoffice.css">
 </head>
-<body>
-    <a href="manage_rooms.php">&laquo; กลับหน้าจัดการห้องพัก</a>
-
-    <h2>เพิ่มประเภทห้องใหม่</h2>
-    <?php if (isset($_GET['added'])): ?>
-        <p style="color:green;">เพิ่มประเภทห้องเรียบร้อยแล้ว</p>
-    <?php endif; ?>
-    <?php if (isset($_GET['updated'])): ?>
-        <p style="color:green;">แก้ไขเรียบร้อยแล้ว</p>
-    <?php endif; ?>
-
-    <div class="panel">
-        <form method="POST">
-            ชื่อประเภท: <input type="text" name="type_name" required placeholder="เช่น ห้องคู่"><br><br>
-            ราคา/คืน: <input type="number" name="price_per_night" step="0.01" min="0" required><br><br>
-            พักได้สูงสุด: <input type="number" name="max_guests" min="1" value="1" required> คน<br><br>
-            รายละเอียด:<br><textarea name="description" rows="2"></textarea><br><br>
-            <button type="submit" name="add_type" value="1">เพิ่มประเภทห้อง</button>
-        </form>
-    </div>
-
-    <h2>ประเภทห้องทั้งหมด (<?= count($types) ?> ประเภท)</h2>
-
-    <?php foreach ($types as $t): ?>
-        <div class="panel">
-            <form method="POST">
-                <input type="hidden" name="type_id" value="<?= $t['id'] ?>">
-                ชื่อประเภท: <input type="text" name="type_name"
-                                   value="<?= htmlspecialchars($t['type_name']) ?>" required><br><br>
-                ราคา/คืน: <input type="number" name="price_per_night" step="0.01" min="0"
-                                 value="<?= $t['price_per_night'] ?>" required><br><br>
-                พักได้สูงสุด: <input type="number" name="max_guests" min="1"
-                                     value="<?= $t['max_guests'] ?>" required> คน<br><br>
-                รายละเอียด:<br>
-                <textarea name="description" rows="2"><?= htmlspecialchars($t['description']) ?></textarea><br><br>
-                <small style="color:#888;">มีห้องประเภทนี้ <?= $t['room_count'] ?> ห้อง</small><br><br>
-                <button type="submit" name="update_type" value="1">บันทึกการแก้ไข</button>
-            </form>
+<body class="backoffice-body">
+    <header class="bo-header">
+        <div class="bo-header-inner">
+            <a class="bo-brand" href="dashboard.php">PAVEENA HOTEL · ADMIN</a>
+            <nav class="bo-nav" aria-label="เมนูผู้ดูแลระบบ"><a href="dashboard.php">หน้าหลัก</a><a href="manage_rooms.php" aria-current="page">ห้องพัก</a><a href="manage_staff.php">พนักงาน</a><a href="reports.php">รายงาน</a><a href="../customer/logout.php">ออกจากระบบ</a></nav>
         </div>
-    <?php endforeach; ?>
+    </header>
+    <main class="bo-main">
+        <a class="bo-back" href="manage_rooms.php">&larr; กลับหน้าจัดการห้องพัก</a>
+        <header class="bo-page-heading"><div><h1>ประเภทห้องและราคา</h1><p>กำหนดชื่อ ราคา จำนวนผู้เข้าพัก และรายละเอียดของแต่ละประเภท</p></div></header>
+
+        <?php if (isset($_GET['added'])): ?><p class="bo-alert bo-alert-success">เพิ่มประเภทห้องเรียบร้อยแล้ว</p><?php endif; ?>
+        <?php if (isset($_GET['updated'])): ?><p class="bo-alert bo-alert-success">แก้ไขเรียบร้อยแล้ว</p><?php endif; ?>
+
+        <section class="bo-section" aria-labelledby="add-type-title">
+            <h2 id="add-type-title">เพิ่มประเภทห้องใหม่</h2>
+            <form class="bo-form" method="POST">
+                <div class="bo-form-grid">
+                    <label class="bo-field"><span>ชื่อประเภท</span><input type="text" name="type_name" required placeholder="เช่น ห้องคู่"></label>
+                    <label class="bo-field"><span>ราคาต่อคืน (บาท)</span><input type="number" name="price_per_night" step="0.01" min="0" required></label>
+                    <label class="bo-field"><span>จำนวนผู้เข้าพักสูงสุด</span><input type="number" name="max_guests" min="1" value="1" required></label>
+                    <label class="bo-field bo-field-full"><span>รายละเอียด</span><textarea name="description" rows="3"></textarea></label>
+                </div>
+                <div class="bo-actions"><button class="bo-button" type="submit" name="add_type" value="1">เพิ่มประเภทห้อง</button></div>
+            </form>
+        </section>
+
+        <section class="bo-section" aria-labelledby="type-list-title">
+            <h2 id="type-list-title">ประเภทห้องทั้งหมด (<?= count($types) ?> ประเภท)</h2>
+            <div class="bo-card-list">
+            <?php foreach ($types as $t): ?>
+                <article class="bo-card">
+                    <form class="bo-form" method="POST">
+                        <input type="hidden" name="type_id" value="<?= $t['id'] ?>">
+                        <div class="bo-form-grid">
+                            <label class="bo-field"><span>ชื่อประเภท</span><input type="text" name="type_name" value="<?= htmlspecialchars($t['type_name']) ?>" required></label>
+                            <label class="bo-field"><span>ราคาต่อคืน (บาท)</span><input type="number" name="price_per_night" step="0.01" min="0" value="<?= $t['price_per_night'] ?>" required></label>
+                            <label class="bo-field"><span>จำนวนผู้เข้าพักสูงสุด</span><input type="number" name="max_guests" min="1" value="<?= $t['max_guests'] ?>" required></label>
+                            <label class="bo-field bo-field-full"><span>รายละเอียด</span><textarea name="description" rows="3"><?= htmlspecialchars($t['description']) ?></textarea></label>
+                        </div>
+                        <p class="bo-help">มีห้องประเภทนี้ <?= number_format($t['room_count']) ?> ห้อง</p>
+                        <div class="bo-actions"><button class="bo-button" type="submit" name="update_type" value="1">บันทึกการแก้ไข</button></div>
+                    </form>
+                </article>
+            <?php endforeach; ?>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
